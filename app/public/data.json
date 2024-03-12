@@ -1,0 +1,69 @@
+{
+    "participants": [
+      {
+        "id": "participant_001",
+        "name": "山田太郎",
+        "contact_info": "yamada@example.com",
+        "university_name": "東京大学",
+        "role": "学生",
+        "introduction": "ビジネスとテクノロジーの融合に興味があります。",
+        "portfolio_url": "http://yamada-portfolio.example.com",
+        "qr_code": "http://qr.example.com/participant_001",
+        "group_id": "group_001",
+        "likes": 5,
+        "feedback_messages": [
+          {
+            "from": "judge_001",
+            "message": "非常に革新的なアイデアです！",
+            "timestamp": "2024-03-10T10:00:00Z"
+          }
+        ],
+        "check_in_status": {
+          "event_id": "event_001",
+          "checked_in": true,
+          "check_in_time": null
+        }
+      },
+      {
+        "id": "participant_002",
+        "name": "佐藤花子",
+        "contact_info": "sato@example.com",
+        "university_name": "京都大学",
+        "role": "研究者",
+        "introduction": "サステナブルなビジネスモデルに取り組んでいます。",
+        "portfolio_url": "http://sato-portfolio.example.com",
+        "qr_code": "http://qr.example.com/participant_002",
+        "group_id": "group_002",
+        "likes": 3,
+        "feedback_messages": [
+          {
+            "from": "judge_002",
+            "message": "社会的影響が大きいプロジェクトですね。",
+            "timestamp": "2024-03-10T11:00:00Z"
+          }
+        ],
+        "check_in_status": {
+          "event_id": "event_002",
+          "checked_in": false,
+          "check_in_time": null
+        }
+      }
+    ],
+    "events": [
+      {
+        "event_id": "event_001",
+        "event_name": "ビジネスコンテスト2024",
+        "event_date": "2024-04-01",
+        "event_location": "東京国際フォーラム",
+        "description": "若手起業家を対象としたビジネスプランコンテスト"
+      },
+      {
+        "event_id": "event_002",
+        "event_name": "イノベーションチャレンジ2024",
+        "event_date": "2024-05-01",
+        "event_location": "大阪イノベーションハブ",
+        "description": "技術革新をテーマにしたアイデアコンペティション"
+      }
+    ]
+  }
+  

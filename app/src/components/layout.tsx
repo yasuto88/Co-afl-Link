@@ -1,3 +1,4 @@
+import Sidebar from "./Sidebar";
 
 export default function RootLayout({
   children,
@@ -5,6 +6,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div>{children}</div> 
+    <Sidebar>{children}</Sidebar>
   );
 }
