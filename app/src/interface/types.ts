@@ -30,3 +30,26 @@ export interface Participant {
     participants: Participant[];
     events: any[]; // ここでは簡略化のために any 型を使用
   }
+
+  export type UserProps = {
+    name: string;
+    username: string;
+    avatar: string;
+    online: boolean;
+  };
+  
+  export type MessageProps = {
+    id: string;
+    content: string;
+    timestamp: string;
+    sender: UserProps | 'You';
+    attachment?: {
+      fileName: string;
+      type: string;
+      size: string;
+    };
+  };
+  
+  export type ChatProps = {
+    messages: MessageProps[];
+  };

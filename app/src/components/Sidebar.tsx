@@ -1,165 +1,229 @@
 import * as React from "react";
-import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import MuiDrawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
-import CssBaseline from "@mui/material/CssBaseline";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
-import SummarizeIcon from '@mui/icons-material/Summarize';
-import EditIcon from '@mui/icons-material/Edit';
-import GroupIcon from '@mui/icons-material/Group';
-import { Tune } from "@mui/icons-material";
+import GlobalStyles from "@mui/joy/GlobalStyles";
+import Box from "@mui/joy/Box";
+import Divider from "@mui/joy/Divider";
+import List from "@mui/joy/List";
+import ListItem from "@mui/joy/ListItem";
+import ListItemButton, { listItemButtonClasses } from "@mui/joy/ListItemButton";
+import ListItemContent from "@mui/joy/ListItemContent";
+import Typography from "@mui/joy/Typography";
+import Sheet from "@mui/joy/Sheet";
+import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
+import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
+import GroupRoundedIcon from "@mui/icons-material/GroupRounded";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
-const drawerWidth = 240;
+import { closeSidebar } from "../features/utils";
+import Router from "next/router";
+import { Add, Create, Summarize } from "@mui/icons-material";
+import { Toolbar } from "@mui/material";
 
-const openedMixin = (theme: Theme): CSSObject => ({
-  width: drawerWidth,
-  transition: theme.transitions.create("width", {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.enteringScreen,
-  }),
-  overflowX: "hidden",
-});
-
-const closedMixin = (theme: Theme): CSSObject => ({
-  transition: theme.transitions.create("width", {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  overflowX: "hidden",
-  width: `calc(${theme.spacing(7)} + 1px)`,
-  [theme.breakpoints.up("sm")]: {
-    width: `calc(${theme.spacing(8)} + 1px)`,
-  },
-});
-
-const DrawerHeader = styled("div")(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "flex-end",
-  padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
-  ...theme.mixins.toolbar,
-}));
-
-const Drawer = styled(MuiDrawer, {
-  shouldForwardProp: (prop) => prop !== "open",
-})(({ theme, open }) => ({
-  width: drawerWidth,
-  flexShrink: 0,
-  whiteSpace: "nowrap",
-  boxSizing: "border-box",
-  ...(open && {
-    ...openedMixin(theme),
-    "& .MuiDrawer-paper": openedMixin(theme),
-  }),
-  ...(!open && {
-    ...closedMixin(theme),
-    "& .MuiDrawer-paper": closedMixin(theme),
-  }),
-}));
-
-// props: { children?: React.ReactNode; }を受け取って
-interface Props {
-  children?: React.ReactNode;
+function Toggler({
+  defaultExpanded = false,
+  renderToggle,
+  children,
+}: {
+  defaultExpanded?: boolean;
+  children: React.ReactNode;
+  renderToggle: (params: {
+    open: boolean;
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  }) => React.ReactNode;
+}) {
+  const [open, setOpen] = React.useState(defaultExpanded);
+  return (
+    <React.Fragment>
+      {renderToggle({ open, setOpen })}
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateRows: open ? "1fr" : "0fr",
+          transition: "0.2s ease",
+          "& > *": {
+            overflow: "hidden",
+          },
+        }}
+      >
+        {children}
+      </Box>
+    </React.Fragment>
+  );
 }
 
-export default function Sidebar({ children }: Props) {
-  const theme = useTheme();
-  const [open, setOpen] = React.useState(true);
+export default function Sidebar() {
+  const [selected, setSelected] = React.useState(0); // 選択されたメニューアイテムを追跡
 
-  // リストのアイコンを定義する
-  const listIcon = (index: number) => {
-    switch (index) {
+  // 選択を処理する関数
+  const handleSelect = (label: number) => {
+    setSelected(label);
+    // 画面遷移
+    switch (label) {
       case 0:
-        return <SummarizeIcon />;
+        // Home
+        Router.push("/");
+        break;
       case 1:
-        return <EditIcon />;
+        // My profile
+        Router.push("/users");
+        break;
       case 2:
-        return <GroupIcon />;
-      default:
-        return <SummarizeIcon />;
+        // Create a new user
+        break;
+      case 3:
+        // Dashboard
+        break;
     }
   };
 
-  const toggleDrawer = () => {
-    setOpen(!open);
-  };
-
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      <Drawer variant="permanent" open={open}>
-        <DrawerHeader>
-          <IconButton onClick={toggleDrawer}>
-            {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-          </IconButton>
-        </DrawerHeader>
+    <Sheet
+      className="Sidebar"
+      sx={{
+        position: { xs: "fixed", md: "sticky" },
+        transform: {
+          xs: "translateX(calc(100% * (var(--SideNavigation-slideIn, 0) - 1)))",
+          md: "none",
+        },
+        transition: "transform 0.4s, width 0.4s",
+        zIndex: 10000,
+        height: "100dvh",
+        width: "var(--Sidebar-width)",
+        top: 0,
+        p: 2,
+        flexShrink: 0,
+        display: "flex",
+        flexDirection: "column",
+        gap: 2,
+        borderRight: "1px solid",
+        borderColor: "divider",
+      }}
+    >
+      <GlobalStyles
+        styles={(theme) => ({
+          ":root": {
+            "--Sidebar-width": "220px",
+            [theme.breakpoints.up("lg")]: {
+              "--Sidebar-width": "240px",
+            },
+          },
+        })}
+      />
+      <Box
+        className="Sidebar-overlay"
+        sx={{
+          position: "fixed",
+          zIndex: 9998,
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          opacity: "var(--SideNavigation-slideIn)",
+          backgroundColor: "var(--joy-palette-background-backdrop)",
+          transition: "opacity 0.4s",
+          transform: {
+            xs: "translateX(calc(100% * (var(--SideNavigation-slideIn, 0) - 1) + var(--SideNavigation-slideIn, 0) * var(--Sidebar-width, 0px)))",
+            lg: "translateX(-100%)",
+          },
+        }}
+        onClick={() => closeSidebar()}
+      />
+
+      <Box
+        sx={{
+          minHeight: 0,
+          overflow: "hidden auto",
+          flexGrow: 1,
+          display: "flex",
+          flexDirection: "column",
+          [`& .${listItemButtonClasses.root}`]: {
+            gap: 1.5,
+          },
+        }}
+      >
+        {/* <Toolbar /> */}
         <Divider />
-        <List>
-          {["参加者一覧", "編集", "グループ"].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                  }}
-                >
-                  {listIcon(index)}
-                </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-          ))}
+        <List
+          size="sm"
+          sx={{
+            gap: 1,
+            "--List-nestedInsetStart": "30px",
+            "--ListItem-radius": (theme: { vars: { radius: { sm: any } } }) =>
+              theme.vars.radius.sm,
+          }}
+        >
+          <ListItem>
+            <ListItemButton
+              selected={selected === 0}
+              onClick={() => handleSelect(0)}
+            >
+              <HomeRoundedIcon />
+              <ListItemContent>
+                <Typography level="title-sm">Home</Typography>
+              </ListItemContent>
+            </ListItemButton>
+          </ListItem>
+          <ListItem nested>
+            <Toggler
+              renderToggle={({ open, setOpen }) => (
+                <ListItemButton onClick={() => setOpen(!open)}>
+                  <GroupRoundedIcon />
+                  <ListItemContent>
+                    <Typography level="title-sm">Users</Typography>
+                  </ListItemContent>
+                  <KeyboardArrowDownIcon
+                    sx={{ transform: open ? "rotate(180deg)" : "none" }}
+                  />
+                </ListItemButton>
+              )}
+            >
+              <List sx={{ gap: 0.5 }}>
+                <ListItem sx={{ mt: 0.5 }}>
+                  <ListItemButton
+                    role="menuitem"
+                    component="a"
+                    selected={selected === 1}
+                    onClick={() => handleSelect(1)}
+                  >
+                    <Summarize fontSize="small" />
+                    team list
+                  </ListItemButton>
+                </ListItem>
+                <ListItem sx={{ mt: 0.5 }}>
+                  <ListItemButton
+                    role="menuitem"
+                    component="a"
+                    selected={selected === 2}
+                    onClick={() => handleSelect(2)}
+                  >
+                    <Create fontSize="small" />
+                    create team
+                  </ListItemButton>
+                </ListItem>
+                <ListItem>
+                  <ListItemButton
+                    selected={selected === 3}
+                    onClick={() => handleSelect(3)}
+                  >
+                    <Add fontSize="small" />
+                    add member
+                  </ListItemButton>
+                </ListItem>
+              </List>
+            </Toggler>
+          </ListItem>
+          <ListItem>
+            <ListItemButton
+              selected={selected === 4}
+              onClick={() => handleSelect(4)}
+            >
+              <DashboardRoundedIcon />
+              <ListItemContent>
+                <Typography level="title-sm">Dashboard</Typography>
+              </ListItemContent>
+            </ListItemButton>
+          </ListItem>
         </List>
-        <Divider />
-        <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                  }}
-                >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        {/* <DrawerHeader /> */}
-        <Box sx={{ height: 16 }} />
-        {children}
       </Box>
-    </Box>
+    </Sheet>
   );
 }

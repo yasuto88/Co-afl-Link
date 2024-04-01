@@ -1,18 +1,67 @@
-import React, { useEffect, useState } from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import CheckIcon from "@mui/icons-material/Check";
-import { Participant, Data } from "../../interface/types";
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import * as React from "react";
+import Chip from "@mui/joy/Chip";
+import Divider from "@mui/joy/Divider";
+import Table from "@mui/joy/Table";
+import Sheet from "@mui/joy/Sheet";
+import IconButton from "@mui/joy/IconButton";
+import Typography from "@mui/joy/Typography";
+import Menu from "@mui/joy/Menu";
+import MenuButton from "@mui/joy/MenuButton";
+import MenuItem from "@mui/joy/MenuItem";
+import Dropdown from "@mui/joy/Dropdown";
 
-const ParticipantTable: React.FC = () => {
-  const [participants, setParticipants] = useState<Participant[]>([]);
+import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
+import BlockIcon from "@mui/icons-material/Block";
+import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
+import { Data, Participant } from "@/interface/types";
+import { useRouter } from "next/router";
 
-  useEffect(() => {
+function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
+  if (b[orderBy] < a[orderBy]) {
+    return -1;
+  }
+  if (b[orderBy] > a[orderBy]) {
+    return 1;
+  }
+  return 0;
+}
+
+type Order = "asc" | "desc";
+
+function getComparator<Key extends keyof any>(
+  order: Order,
+  orderBy: Key
+): (
+  a: { [key in Key]: number | string },
+  b: { [key in Key]: number | string }
+) => number {
+  return order === "desc"
+    ? (a, b) => descendingComparator(a, b, orderBy)
+    : (a, b) => -descendingComparator(a, b, orderBy);
+}
+
+function stableSort<T>(
+  array: readonly T[],
+  comparator: (a: T, b: T) => number
+) {
+  const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
+  stabilizedThis.sort((a, b) => {
+    const order = comparator(a[0], b[0]);
+    if (order !== 0) {
+      return order;
+    }
+    return a[1] - b[1];
+  });
+  return stabilizedThis.map((el) => el[0]);
+}
+
+export default function ParticipantTable() {
+  const router = useRouter();
+  const [order, setOrder] = React.useState<Order>("desc");
+  const [participants, setParticipants] = React.useState<Participant[]>([]);
+
+  React.useEffect(() => {
     fetch("data.json")
       .then((response) => response.json())
       .then((data: Data) => {
@@ -23,45 +72,92 @@ const ParticipantTable: React.FC = () => {
       );
   }, []);
 
-  const handleRowClick = (participantId: string) => {
-    // user/[userId].tsx に遷移する
-    window.location.href = `/user/${participantId}`;
-  };
-
   return (
-    <TableContainer
-      component={Paper}
-      sx={{ width: "80%", maxWidth: 720, margin: "auto", mt: 2, mb: 2 }}
-    >
-      <Table aria-label="participant table">
-        <TableHead>
-          <TableRow>
-            <TableCell>名前</TableCell>
-            <TableCell align="right">大学名</TableCell>
-            <TableCell align="right">グループ名</TableCell>
-            <TableCell align="right">参加状況</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {participants.map((participant) => (
-            <TableRow
-              key={participant.id}
-              hover
-              onClick={() => handleRowClick(participant.id)}
-              style={{ cursor: "pointer" }}
-            >
-              <TableCell>{participant.name}</TableCell>
-              <TableCell align="right">{participant.university_name}</TableCell>
-              <TableCell align="right">{participant.group_id}</TableCell>
-              <TableCell align="right">
-                {participant.check_in_status.checked_in ? <CheckIcon /> : ""}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <React.Fragment>
+      <Sheet
+        className="OrderTableContainer"
+        variant="outlined"
+        sx={{
+          display: { xs: "none", sm: "initial" },
+          width: "100%",
+          borderRadius: "sm",
+          flexShrink: 1,
+          overflow: "auto",
+          minHeight: 0,
+        }}
+      >
+        <Table
+          aria-labelledby="tableTitle"
+          stickyHeader
+          hoverRow
+          style={{ cursor: "pointer" }}
+          sx={{
+            "--TableCell-headBackground":
+              "var(--joy-palette-background-level1)",
+            "--Table-headerUnderlineThickness": "1px",
+            "--TableRow-hoverBackground":
+              "var(--joy-palette-background-level1)",
+            "--TableCell-paddingY": "4px",
+            "--TableCell-paddingX": "8px",
+          }}
+        >
+          <thead>
+            <tr>
+              <th style={{ width: 140, padding: "12px 6px" }}>名前</th>
+              <th style={{ width: 140, padding: "12px 6px" }}>グループ</th>
+              <th style={{ width: 240, padding: "12px 6px" }}>参加状況</th>
+              <th style={{ width: 140, padding: "12px 6px" }}>大学名</th>
+            </tr>
+          </thead>
+          <tbody>
+            {stableSort(participants, getComparator(order, "id")).map(
+              (participant) => (
+                <tr
+                  key={participant.id}
+                  onClick={() => router.push(`/user/${participant.id}`)}
+                >
+                  {/* -------------------------------------------------------------------------------------------- */}
+                  {/* -------------------------------------------------------------------------------------------- */}
+                  {/* -------------------------------------------------------------------------------------------- */}
+                  <td>
+                    <Typography level="body-xs">{participant.name}</Typography>
+                  </td>
+                  <td>
+                    <Typography level="body-xs">
+                      {participant.group_id}
+                    </Typography>
+                  </td>
+                  <td>
+                    <Chip
+                      variant="soft"
+                      size="sm"
+                      startDecorator={
+                        participant.check_in_status.checked_in ? (
+                          <CheckRoundedIcon />
+                        ) : (
+                          <BlockIcon />
+                        )
+                      }
+                      color={
+                        participant.check_in_status.checked_in
+                          ? "success"
+                          : "danger"
+                      }
+                    >
+                      {participant.check_in_status.checked_in ? "参加" : "欠席"}
+                    </Chip>
+                  </td>
+                  <td>
+                    <Typography level="body-xs">
+                      {participant.university_name}
+                    </Typography>
+                  </td>
+                </tr>
+              )
+            )}
+          </tbody>
+        </Table>
+      </Sheet>
+    </React.Fragment>
   );
-};
-
-export default ParticipantTable;
+}

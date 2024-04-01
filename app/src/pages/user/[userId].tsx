@@ -1,7 +1,8 @@
 // pages/user.tsx
 import React, { use } from "react";
 import { useRouter } from "next/router";
-import ProfileTop from "@/components/Profile/ProfileTop";
+// import ProfileTop from "@/components/Profile/ProfileTop";
+import MyProfile from "@/components/Profile/MyProfile";
 
 const UserPage: React.FC = () => {
   const router = useRouter();
@@ -34,13 +35,14 @@ const UserPage: React.FC = () => {
   };
 
   return (
-    <ProfileTop
-      name={userData.name}
-      university={userData.university_name}
-      qrCodeUrl={userData.qr_code}
-      contact_info={userData.contact_info}
-      group_id={userData.group_id}
-    />
+    // <ProfileTop
+    //   name={userData.name}
+    //   university={userData.university_name}
+    //   qrCodeUrl={userData.qr_code}
+    //   contact_info={userData.contact_info}
+    //   group_id={userData.group_id}
+    // />
+    <MyProfile />
   );
 };
 
