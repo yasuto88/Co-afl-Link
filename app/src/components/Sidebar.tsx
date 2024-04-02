@@ -17,6 +17,7 @@ import { closeSidebar } from "../features/utils";
 import Router from "next/router";
 import { Add, Create, Summarize } from "@mui/icons-material";
 import { Toolbar } from "@mui/material";
+import { Avatar, Stack } from "@mui/joy";
 
 function Toggler({
   defaultExpanded = false,
@@ -140,7 +141,10 @@ export default function Sidebar() {
           },
         }}
       >
-        {/* <Toolbar /> */}
+        <Stack direction={"row"} alignItems={"center"} spacing={2} mb={1}>
+          <Avatar src="/icon.png" sx={{ width: 48, height: 48 }} />
+          <Typography level="title-lg">co-afl</Typography>
+        </Stack>
         <Divider />
         <List
           size="sm"
@@ -218,7 +222,7 @@ export default function Sidebar() {
             >
               <DashboardRoundedIcon />
               <ListItemContent>
-                <Typography level="title-sm">Dashboard</Typography>
+                <Typography level="title-sm">MessageBoard</Typography>
               </ListItemContent>
             </ListItemButton>
           </ListItem>
