@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import {
   Box,
@@ -16,33 +16,90 @@ import {
 import IconButton from "@mui/joy/IconButton";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import Option from "@mui/joy/Option";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { filterState } from "@/state/atoms/filterState";
+import { userState } from "@/state/atoms/user";
 
 interface Props {
   // props here
 }
 
 const Search: React.FC<Props> = (props) => {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const [university, setUniversity] = useState("");
+  const [group, setGroup] = useState("");
+  const [filter, setFilter] = useRecoilState(filterState);
+  const user = useRecoilValue(userState);
+  const [universities, setUniversities] = useState<string[]>([]);
+  const [groups, setGroups] = useState<(string | undefined)[]>([]);
+
+  const handleSearch = (
+    event: React.SyntheticEvent | null,
+    newValue: string | null
+  ) => {
+    setSearch(newValue || "");
+    setFilter((prev) => ({
+      ...prev,
+      name: newValue || "",
+    }));
+  };
+
+  const handleUniversity = (
+    event: React.SyntheticEvent | null,
+    newValue: string | null
+  ) => {
+    setUniversity(newValue || "");
+    setFilter((prev) => ({
+      ...prev,
+      universityName: newValue || "",
+    }));
+  };
+
+  const handleGroup = (
+    event: React.SyntheticEvent | null,
+    newValue: string | null
+  ) => {
+    setGroup(newValue || "");
+    setFilter((prev) => ({
+      ...prev,
+      groupName: newValue || "",
+    }));
+  };
+
+  useEffect(() => {
+    const universityName = [...new Set(user?.map((u) => u.university_name))];
+    setUniversities(universityName);
+
+    const groupName = [...new Set(user?.map((u) => u.group_id))];
+    setGroups(groupName);
+  }, [user]);
+
   const renderFilters = () => (
     <React.Fragment>
       <FormControl size="sm">
-        <Select
-          size="sm"
-          placeholder="参加状況"
-          slotProps={{ button: { sx: { whiteSpace: "nowrap" } } }}
-        >
-          <Option value="paid">参加</Option>
-          <Option value="pending">欠席</Option>
-          <Option value="all">all</Option>
+        <Select size="sm" placeholder="グループ" onChange={handleGroup}>
+          {groups.map((group, index) => (
+            <Option key={index} value={group}>
+              {group}
+            </Option>
+          ))}
+          <Option value="">all</Option>
         </Select>
       </FormControl>
       <FormControl size="sm">
-        <Select size="sm" placeholder="グループ">
-          <Option value="group1">グループ1</Option>
-          <Option value="group2">グループ2</Option>
-          <Option value="group3">グループ3</Option>
-          <Option value="group4">グループ4</Option>
-          <Option value="all">all</Option>
+        <Select
+          size="sm"
+          placeholder="大学"
+          slotProps={{ button: { sx: { whiteSpace: "nowrap" } } }}
+          onChange={handleUniversity}
+        >
+          {universities.map((university, index) => (
+            <Option key={index} value={university}>
+              {university}
+            </Option>
+          ))}
+          <Option value="">all</Option>
         </Select>
       </FormControl>
     </React.Fragment>
@@ -59,9 +116,11 @@ const Search: React.FC<Props> = (props) => {
       >
         <Input
           size="sm"
-          placeholder="Search"
+          placeholder="名前を検索"
           startDecorator={<SearchIcon />}
           sx={{ flexGrow: 1 }}
+          onChange={(event) => handleSearch(event, event.target.value)}
+          id="search"
         />
         <IconButton
           size="sm"
@@ -71,6 +130,8 @@ const Search: React.FC<Props> = (props) => {
         >
           <FilterAltIcon />
         </IconButton>
+        
+
         <Modal open={open} onClose={() => setOpen(false)}>
           <ModalDialog aria-labelledby="filter-modal" layout="fullscreen">
             <ModalClose />
@@ -100,11 +161,14 @@ const Search: React.FC<Props> = (props) => {
           },
         }}
       >
+        
         <FormControl sx={{ flex: 1 }} size="sm">
           <Input
             size="sm"
             placeholder="名前を検索"
             startDecorator={<SearchIcon />}
+            onChange={(event) => handleSearch(event, event.target.value)}
+            id="search"
           />
         </FormControl>
         {renderFilters()}

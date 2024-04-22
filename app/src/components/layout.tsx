@@ -17,13 +17,20 @@ export default function RootLayout({
       }}
     >
       <Header />
-      <Box sx={{ display: "flex", flex: 1, overflow: "hidden" }}>
+      
+      <Box
+        sx={{
+          display: "flex",
+          flex: 1,
+          overflow: "hidden",
+        }}
+      >
         <Sidebar />
         <Sheet
           component="main"
           className="MainContent"
           sx={{
-            px: { xs: 2, md: 6 },
+            px: { xs: 2, md: 4 },
             pt: {
               xs: "calc(12px + var(--Header-height))",
               sm: "calc(12px + var(--Header-height))",

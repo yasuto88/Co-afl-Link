@@ -1,0 +1,104 @@
+[
+    {
+      "id": "file_team_0_0",
+      "name": "Document.pptx",
+      "size": "471 KB",
+      "type": "Presentation"
+    },
+    {
+      "id": "file_team_0_1",
+      "name": "Project.png",
+      "size": "228 KB",
+      "type": "Image"
+    },
+    {
+      "id": "file_team_0_2",
+      "name": "Presentation.pdf",
+      "size": "307 KB",
+      "type": "PDF"
+    },
+    {
+      "id": "file_team_0_3",
+      "name": "Report.pdf",
+      "size": "412 KB",
+      "type": "PDF"
+    },
+    {
+      "id": "file_team_0_4",
+      "name": "Document.png",
+      "size": "1513 KB",
+      "type": "Image"
+    },
+    {
+      "id": "file_team_1_0",
+      "name": "Report.docx",
+      "size": "576 KB",
+      "type": "Document"
+    },
+    {
+      "id": "file_team_1_1",
+      "name": "Analysis.pptx",
+      "size": "1480 KB",
+      "type": "Presentation"
+    },
+    {
+      "id": "file_team_2_0",
+      "name": "Document.zip",
+      "size": "1632 KB",
+      "type": "Archive"
+    },
+    {
+      "id": "file_team_2_1",
+      "name": "Report.docx",
+      "size": "565 KB",
+      "type": "Document"
+    },
+    {
+      "id": "file_team_2_2",
+      "name": "Document.png",
+      "size": "979 KB",
+      "type": "Image"
+    },
+    {
+      "id": "file_team_2_3",
+      "name": "Review.png",
+      "size": "72 KB",
+      "type": "Image"
+    },
+    {
+      "id": "file_team_2_4",
+      "name": "Presentation.zip",
+      "size": "1978 KB",
+      "type": "Archive"
+    },
+    {
+      "id": "file_team_3_0",
+      "name": "Report.docx",
+      "size": "479 KB",
+      "type": "Document"
+    },
+    {
+      "id": "file_team_3_1",
+      "name": "Document.docx",
+      "size": "1924 KB",
+      "type": "Document"
+    },
+    {
+      "id": "file_team_3_2",
+      "name": "Analysis.xlsx",
+      "size": "541 KB",
+      "type": "Spreadsheet"
+    },
+    {
+      "id": "file_team_4_0",
+      "name": "Presentation.xlsx",
+      "size": "125 KB",
+      "type": "Spreadsheet"
+    },
+    {
+      "id": "file_team_4_1",
+      "name": "Project.xlsx",
+      "size": "965 KB",
+      "type": "Spreadsheet"
+    }
+  ]

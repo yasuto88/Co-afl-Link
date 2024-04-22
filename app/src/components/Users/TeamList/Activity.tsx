@@ -2,83 +2,67 @@ import {
   Avatar,
   Box,
   Button,
-  Chip,
   Divider,
   List,
-  ListItem,
-  ListItemContent,
-  ListItemDecorator,
   Sheet,
   Typography,
 } from "@mui/joy";
-import React from "react";
+import React, { use, useEffect, useState } from "react";
 import KeyboardArrowRightRoundedIcon from "@mui/icons-material/KeyboardArrowRightRounded";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import Stepper from "@mui/joy/Stepper";
 import Step from "@mui/joy/Step";
-import StepButton from "@mui/joy/StepButton";
 import StepIndicator from "@mui/joy/StepIndicator";
 import Check from "@mui/icons-material/Check";
+import { Team, User } from "@/interface/types";
+import type { Activity } from "@/interface/types";
 
 interface Props {
-  // props here
+  team: Team;
 }
 
-const Activity: React.FC<Props> = (props) => {
-  const peopleData = [
+const Activity: React.FC<Props> = ({ team }) => {
+  const [activity, setActivity] = useState<
     {
-      name: "山田太郎",
-      position: "UI Designer",
-      avatar2x: "",
-      taskData: [
+      user: User;
+      activities: Activity[];
+    }[]
+  >([]);
+
+  useEffect(() => {
+    const fetchMembersAndActivities = async () => {
+      // ユーザーデータとアクティビティデータの取得
+      // const userResponse = await fetch("/User.json");
+      // const users: User[] = await userResponse.json();
+      const activityResponse = await fetch("/Activity.json");
+      const allActivities: Activity[] = await activityResponse.json();
+
+      // team.member_ids に含まれる各メンバーIDに対応するユーザーとアクティビティを検索
+      const memberActivitiesPromise: Promise<
         {
-          time: "2024/4/1 12:15",
-          description: "デザインの修正",
-        },
-        {
-          time: "2024/4/1 19:00",
-          description: "デザインの作成",
-        },
-        {
-          time: "2024/4/2 10:00",
-          description: "デザインの修正",
-        },
-      ],
-      skills: ["UI design", "Illustration"],
-    },
-    {
-      name: "田中花子",
-      position: "Frontend Developer",
-      avatar2x: "",
-      taskData: [
-        {
-          time: "2024/4/1 12:15",
-          description: "コンポーネントの修正",
-        },
-      ],
-      skills: ["React", "TypeScript"],
-    },
-    {
-      name: "佐藤次郎",
-      position: "Backend Developer",
-      avatar2x: "",
-      taskData: [
-        {
-          time: "2024/4/1 12:15",
-          description: "APIの修正",
-        },
-        {
-          time: "2024/4/1 19:00",
-          description: "APIの作成",
-        },
-        {
-          time: "2024/4/2 10:00",
-          description: "APIの修正",
-        },
-      ],
-      skills: ["Node.js", "Express"],
-    },
-  ];
+          user: User;
+          activities: Activity[];
+        }[]
+      > = Promise.all(
+        team.member_ids?.map(async (memberId) => {
+          console.log(memberId);
+          const user = await fetch(`/api/user/${memberId}`);
+          const data: User = await user.json();
+          const userActivities = allActivities.filter((activity) =>
+            data?.activity_ids?.includes(activity.id)
+          );
+
+          return { user: data || ({} as User), activities: userActivities };
+        }) || []
+      );
+      // console.log(memberActivitiesPromise);
+
+      // 状態を更新
+      setActivity(await memberActivitiesPromise);
+    };
+
+    fetchMembersAndActivities();
+  }, [team.member_ids]);
+
   return (
     <List
       sx={{
@@ -87,7 +71,7 @@ const Activity: React.FC<Props> = (props) => {
         gap: 2,
       }}
     >
-      {peopleData.map((person, index) => (
+      {activity.map((data, index) => (
         <Sheet
           key={index}
           component="li"
@@ -101,13 +85,12 @@ const Activity: React.FC<Props> = (props) => {
           <Box sx={{ display: "flex", gap: 2 }}>
             <Avatar
               variant="outlined"
-              src={person.avatar2x}
-              srcSet={`${person.avatar2x} 2x`}
               sx={{ borderRadius: "50%" }}
+              src={data.user.slack_icon_url}
             />
             <div>
-              <Typography level="title-md">{person.name}</Typography>
-              <Typography level="body-xs">{person.position}</Typography>
+              <Typography level="title-md">{data.user.name}</Typography>
+              <Typography level="body-xs">{data.user.role}</Typography>
             </div>
           </Box>
           <Divider component="div" sx={{ my: 2 }} />
@@ -115,21 +98,24 @@ const Activity: React.FC<Props> = (props) => {
             sx={{ width: "100%", "--Step-gap": "16px" }}
             orientation="vertical"
           >
-            {person.taskData.map((task, taskIndex) => (
-              <Step
-                key={task.time}
-                indicator={
-                  <StepIndicator color="primary">
-                    <Check />
-                  </StepIndicator>
-                }
-              >
-                <Typography level="title-sm">{task.time}</Typography>
-                <Typography level="body-xs">{task.description}</Typography>
-              </Step>
-            ))}
+            {data.activities.map(
+              (task, taskIndex) =>
+                taskIndex < 3 && (
+                  <Step
+                    key={task.time}
+                    indicator={
+                      <StepIndicator color="primary">
+                        <Check />
+                      </StepIndicator>
+                    }
+                  >
+                    <Typography level="title-sm">{task.description}</Typography>
+                    <Typography level="body-xs">{task.time}</Typography>
+                  </Step>
+                )
+            )}
           </Stepper>
-          {person.taskData.length > 2 && (
+          {data.activities.length > 2 && (
             <Button
               size="sm"
               variant="plain"
@@ -139,14 +125,6 @@ const Activity: React.FC<Props> = (props) => {
               Expand
             </Button>
           )}
-          {/* <Button
-            size="sm"
-            variant="plain"
-            endDecorator={<KeyboardArrowRightRoundedIcon fontSize="small" />}
-            sx={{ px: 1, mt: 1 }}
-          >
-            Expand
-          </Button> */}
         </Sheet>
       ))}
     </List>

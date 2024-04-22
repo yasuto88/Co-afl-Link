@@ -15,7 +15,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 import { closeSidebar } from "../features/utils";
 import Router from "next/router";
-import { Add, Create, Summarize } from "@mui/icons-material";
+import { Add, Create, Forum, Summarize } from "@mui/icons-material";
 import { Toolbar } from "@mui/material";
 import { Avatar, Stack } from "@mui/joy";
 
@@ -54,6 +54,18 @@ function Toggler({
 export default function Sidebar() {
   const [selected, setSelected] = React.useState(0); // 選択されたメニューアイテムを追跡
 
+  React.useEffect(() => {
+    // ページがロードされたときに選択されたメニューアイテムを更新
+    const path = window.location.pathname;
+    if (path === "/") {
+      setSelected(0);
+    } else if (path === "/teams") {
+      setSelected(1);
+    } else if (path === "/MessageBoardPage") {
+      setSelected(4);
+    }
+  }, []);
+
   // 選択を処理する関数
   const handleSelect = (label: number) => {
     setSelected(label);
@@ -65,13 +77,17 @@ export default function Sidebar() {
         break;
       case 1:
         // My profile
-        Router.push("/users");
+        Router.push("/teams");
         break;
       case 2:
         // Create a new user
         break;
       case 3:
         // Dashboard
+        break;
+      case 4:
+        // MessageBoard
+        Router.push("/MessageBoardPage");
         break;
     }
   };
@@ -113,7 +129,7 @@ export default function Sidebar() {
         className="Sidebar-overlay"
         sx={{
           position: "fixed",
-          zIndex: 9998,
+          zIndex: 9999,
           top: 0,
           left: 0,
           width: "100vw",
@@ -166,13 +182,24 @@ export default function Sidebar() {
               </ListItemContent>
             </ListItemButton>
           </ListItem>
-          <ListItem nested>
+          <ListItem>
+            <ListItemButton
+              selected={selected === 1}
+              onClick={() => handleSelect(1)}
+            >
+              <GroupRoundedIcon />
+              <ListItemContent>
+                <Typography level="title-sm">teams</Typography>
+              </ListItemContent>
+            </ListItemButton>
+          </ListItem>
+          {/* <ListItem nested>
             <Toggler
               renderToggle={({ open, setOpen }) => (
                 <ListItemButton onClick={() => setOpen(!open)}>
                   <GroupRoundedIcon />
                   <ListItemContent>
-                    <Typography level="title-sm">Users</Typography>
+                    <Typography level="title-sm">teams</Typography>
                   </ListItemContent>
                   <KeyboardArrowDownIcon
                     sx={{ transform: open ? "rotate(180deg)" : "none" }}
@@ -214,13 +241,14 @@ export default function Sidebar() {
                 </ListItem>
               </List>
             </Toggler>
-          </ListItem>
+          </ListItem> */}
+
           <ListItem>
             <ListItemButton
               selected={selected === 4}
               onClick={() => handleSelect(4)}
             >
-              <DashboardRoundedIcon />
+              <Forum />
               <ListItemContent>
                 <Typography level="title-sm">MessageBoard</Typography>
               </ListItemContent>

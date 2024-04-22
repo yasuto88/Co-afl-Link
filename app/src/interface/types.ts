@@ -5,35 +5,42 @@ export interface User {
   name_kana: string;
   contact_info: string;
   university_name: string;
-  role: string;
-  introduction: string;
-  portfolio_url: string[];
-  group_id: string;
-  feedback_messages: FeedbackMessage[];
-  check_in_status: CheckInStatus;
+  faculty?: string;
+  department?: string;
+  role?: string;
+  introduction?: string;
+  portfolio_url?: string[];
+  group_id?: string;
+  feedback_message_ids?: string[];
+  activity_ids: string[];
+  slack_id: string;
+  slack_email?: string;
+  slack_icon_url?: string;
 }
 
 // フィードバックメッセージに関する情報
 export interface FeedbackMessage {
-  name: string;
+  id: string;
+  name?: string;
   title: string;
-  type: string;
+  type: "good" | "hint" | "bad";
   message: string;
   timestamp: string;
 }
 
 // チェックインステータスに関する情報
 export interface CheckInStatus {
+  id: string;
   checked_in: boolean;
   check_in_time: null | string;
 }
 
 // チャットメッセージに関する情報
-export type MessageProps = {
+export type Message = {
   id: string;
+  user_id: string;
   content: string;
   timestamp: string;
-  sender: User | "You";
   attachment?: {
     fileName: string;
     type: string;
@@ -42,38 +49,43 @@ export type MessageProps = {
 };
 
 // ファイルに関する情報
-export type FileProps = {
+export type File = {
   id: string;
   name: string;
   size: string;
   type: string;
-  url: string;
 };
 
 // タスクに関する情報
-export type Task = {
+// export type Task = {
+//   id: string;
+//   time: string;
+//   description: string;
+// };
+
+// アクティビティに関する情報
+export type Activity = {
+  id: string;
   time: string;
   description: string;
 };
 
-// アクティビティに関する情報
-export type Activity = {
-  user: User;
-  taskData: Task[];
-};
-
 // チームに関する情報
-export type Teams = {
+export type Team = {
   id: string;
   name: string;
-  members: User[];
-  activities: Activity[];
-  messages: MessageProps[];
-  files: FileProps[];
+  member_ids: string[];
+  message_ids: string[];
+  file_ids: string[];
 };
 
 // data.jsonから取得したデータ全体の型定義
 export interface Data {
-  user: User[];
-  team: Teams[];
+  users: User[];
+  teams: Team[];
+  feedbackMessages: FeedbackMessage[];
+  checkInStatuses: CheckInStatus[];
+  messages: Message[];
+  files: File[];
+  activities: Activity[];
 }

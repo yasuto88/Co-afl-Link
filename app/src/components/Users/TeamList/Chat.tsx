@@ -2,13 +2,30 @@ import * as React from "react";
 import Stack from "@mui/joy/Stack";
 import Sheet from "@mui/joy/Sheet";
 import { Box } from "@mui/joy";
-import { MessageProps } from "@/interface/types";
+import { Message, Team } from "@/interface/types";
 import ChatBubble from "./ChatBubble";
-type ChatsPaneProps = {
-  chats: MessageProps[];
+type Props = {
+  team: Team;
 };
 
-export default function Chat(props: ChatsPaneProps): React.JSX.Element {
+export default function Chat(props: Props): React.JSX.Element {
+  const [chatData, setChatData] = React.useState<Message[]>([]);
+  React.useEffect(() => {
+    const fetchChatData = async () => {
+      try {
+        const response = await fetch("/Message.json");
+        const allChats: Message[] = await response.json();
+        const relevantChats = allChats.filter((chat) =>
+          props.team.message_ids.includes(chat.id)
+        );
+        setChatData(relevantChats);
+      } catch (error) {
+        console.error("Error fetching chat data:", error);
+      }
+    };
+
+    fetchChatData();
+  }, [props.team.message_ids]);
   return (
     <Box
       sx={{
@@ -24,16 +41,15 @@ export default function Chat(props: ChatsPaneProps): React.JSX.Element {
       }}
     >
       <Stack spacing={2} justifyContent="flex-end">
-        {props.chats.map((message: MessageProps, index: number) => {
-          const isYou = message.sender === "You";
+        {chatData.map((message: Message, index: number) => {
           return (
             <Stack
               key={index}
               direction="row"
               spacing={2}
-              flexDirection={isYou ? "row-reverse" : "row"}
+              flexDirection={"row"}
             >
-              <ChatBubble variant={isYou ? "sent" : "received"} {...message} />
+              <ChatBubble message={message} />
             </Stack>
           );
         })}

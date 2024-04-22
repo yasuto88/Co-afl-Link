@@ -1,84 +1,68 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import * as React from "react";
-import Chip from "@mui/joy/Chip";
-import Divider from "@mui/joy/Divider";
 import Table from "@mui/joy/Table";
 import Sheet from "@mui/joy/Sheet";
-import IconButton from "@mui/joy/IconButton";
 import Typography from "@mui/joy/Typography";
-import Menu from "@mui/joy/Menu";
-import MenuButton from "@mui/joy/MenuButton";
-import MenuItem from "@mui/joy/MenuItem";
-import Dropdown from "@mui/joy/Dropdown";
 
-import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
-import BlockIcon from "@mui/icons-material/Block";
-import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
-import { Data, Participant } from "@/interface/types";
 import { useRouter } from "next/router";
+import { User } from "@/interface/types";
+import { Avatar, Button, Chip, CircularProgress } from "@mui/joy";
+import CachedIcon from "@mui/icons-material/Cached";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { userState } from "@/state/atoms/user";
+import { filterState } from "@/state/atoms/filterState";
+import { Stack } from "@mui/material";
 
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
+interface Props {
+  participants: User[];
 }
 
-type Order = "asc" | "desc";
-
-function getComparator<Key extends keyof any>(
-  order: Order,
-  orderBy: Key
-): (
-  a: { [key in Key]: number | string },
-  b: { [key in Key]: number | string }
-) => number {
-  return order === "desc"
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort<T>(
-  array: readonly T[],
-  comparator: (a: T, b: T) => number
-) {
-  const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) {
-      return order;
-    }
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
-
-export default function ParticipantTable() {
+const ParticipantTable: React.FC<Props> = (props) => {
   const router = useRouter();
-  const [order, setOrder] = React.useState<Order>("desc");
-  const [participants, setParticipants] = React.useState<Participant[]>([]);
+  const [user, setUser] = useRecoilState<User[] | null>(userState);
+  const filter = useRecoilValue(filterState);
+  //ローディング中のフラグ
+  const [loading, setLoading] = React.useState(false);
 
-  React.useEffect(() => {
-    fetch("data.json")
-      .then((response) => response.json())
-      .then((data: Data) => {
-        setParticipants(data.participants);
-      })
-      .catch((error) =>
-        console.error("Error loading the participants:", error)
-      );
-  }, []);
+  const updateParticipants = async () => {
+    try {
+      // localStorageのuserDataを削除
+      localStorage.removeItem("userData");
+      setUser(null);
+      setLoading(true);
+      const res = await fetch("/api/fetchUser");
+      const data = await res.json();
+      // 3秒待機
+      // await new Promise((resolve) => setTimeout(resolve, 3000));
+      setUser(data);
+      setLoading(false);
+      localStorage.setItem("userData", JSON.stringify(data));
+      console.log("Fetched data from API and saved to localStorage:", data);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
 
   return (
     <React.Fragment>
+      <Button
+        size="sm"
+        variant="outlined"
+        color="neutral"
+        sx={{
+          marginRight: "auto",
+          marginBottom: "8px",
+        }}
+        startDecorator={<CachedIcon />}
+        onClick={updateParticipants}
+      >
+        <Typography level="body-xs">テーブルを更新</Typography>
+      </Button>
       <Sheet
         className="OrderTableContainer"
         variant="outlined"
         sx={{
-          display: { xs: "none", sm: "initial" },
+          display: { sm: "initial" },
           width: "100%",
           borderRadius: "sm",
           flexShrink: 1,
@@ -105,59 +89,111 @@ export default function ParticipantTable() {
             <tr>
               <th style={{ width: 140, padding: "12px 6px" }}>名前</th>
               <th style={{ width: 140, padding: "12px 6px" }}>グループ</th>
-              <th style={{ width: 240, padding: "12px 6px" }}>参加状況</th>
               <th style={{ width: 140, padding: "12px 6px" }}>大学名</th>
+              <th style={{ width: 140, padding: "12px 6px" }}>役割</th>
             </tr>
           </thead>
-          <tbody>
-            {stableSort(participants, getComparator(order, "id")).map(
-              (participant) => (
-                <tr
-                  key={participant.id}
-                  onClick={() => router.push(`/user/${participant.id}`)}
-                >
-                  {/* -------------------------------------------------------------------------------------------- */}
-                  {/* -------------------------------------------------------------------------------------------- */}
-                  {/* -------------------------------------------------------------------------------------------- */}
-                  <td>
-                    <Typography level="body-xs">{participant.name}</Typography>
-                  </td>
-                  <td>
+          {props.participants.length === 0 && !loading && (
+            <tbody>
+              <tr>
+                <td colSpan={4}>
+                  <Sheet
+                    variant="soft"
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      minHeight: 100,
+                      borderRadius: "sm",
+                    }}
+                  >
                     <Typography level="body-xs">
-                      {participant.group_id}
+                      {/* 参加者がいません */}
                     </Typography>
-                  </td>
-                  <td>
+                  </Sheet>
+                </td>
+              </tr>
+            </tbody>
+          )}
+          {loading && (
+            <tbody>
+              <tr>
+                <td colSpan={4}>
+                  <Sheet
+                    variant="soft"
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      minHeight: 100,
+                      borderRadius: "sm",
+                    }}
+                  >
+                    <CircularProgress />
+                  </Sheet>
+                </td>
+              </tr>
+            </tbody>
+          )}
+          <tbody>
+            {props.participants.map((participant, index) => (
+              <tr
+                key={participant.id}
+                onClick={() => router.push(`/user/${participant.id}`)}
+              >
+                <td>
+                  <Stack direction="row" gap={1} alignItems="center">
+                    <Avatar
+                      variant="soft"
+                      src={participant.slack_icon_url}
+                      sx={{ marginLeft: "8px" }}
+                      size="sm"
+                    />
+                    <Typography level="body-xs">{participant.name}</Typography>
+                  </Stack>
+                </td>
+                <td>
+                  <Typography level="body-xs">
+                    {participant.group_id}
+                  </Typography>
+                </td>
+                {/* <td>
                     <Chip
                       variant="soft"
                       size="sm"
                       startDecorator={
-                        participant.check_in_status.checked_in ? (
-                          <CheckRoundedIcon />
-                        ) : (
-                          <BlockIcon />
-                        )
+                        index % 2 !== 1 ? <CheckRoundedIcon /> : <BlockIcon />
                       }
-                      color={
-                        participant.check_in_status.checked_in
-                          ? "success"
-                          : "danger"
-                      }
+                      color={index % 2 !== 1 ? "success" : "danger"}
                     >
-                      {participant.check_in_status.checked_in ? "参加" : "欠席"}
+                      {index % 2 !== 1 ? "参加" : "欠席"}
                     </Chip>
-                  </td>
-                  <td>
-                    <Typography level="body-xs">
-                      {participant.university_name}
-                    </Typography>
-                  </td>
-                </tr>
-              )
-            )}
+                  </td> */}
+                <td>
+                  <Typography level="body-xs">
+                    {participant.university_name}
+                  </Typography>
+                </td>
+                <td>
+                  <Chip
+                    variant="soft"
+                    size="sm"
+                    // startDecorator={<MilitaryTechRoundedIcon />}
+                    color="primary"
+                    sx={{
+                      display: participant.role ? "flex" : "none",
+                    }}
+                  >
+                    {participant.role}
+                  </Chip>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </Table>
       </Sheet>
     </React.Fragment>
   );
-}
+};
+
+export default ParticipantTable;

@@ -1,0 +1,433 @@
+[
+  {
+    "id": "user_0",
+    "name": "User 0",
+    "name_kana": "ユーザー 0",
+    "contact_info": "user0@example.com",
+    "university_name": "University 0",
+    "role": null,
+    "introduction": "This is an introduction for User 0.",
+    "portfolio_url": [
+      "http://example.com/portfolio/0"
+    ],
+    "group_id": "team_1",
+    "feedback_message_ids": [
+      "feedback_0_0"
+    ],
+    "check_in_status_id": "check_in_status_0",
+    "activity_ids": [
+      "activity_0_0",
+      "activity_0_1",
+      "activity_0_2",
+      "activity_0_3",
+      "activity_0_4"
+    ]
+  },
+  {
+    "id": "user_1",
+    "name": "User 1",
+    "name_kana": "ユーザー 1",
+    "contact_info": "user1@example.com",
+    "university_name": "University 1",
+    "role": "Researcher",
+    "introduction": null,
+    "portfolio_url": null,
+    "group_id": "team_3",
+    "feedback_message_ids": [
+      "feedback_1_0",
+      "feedback_1_1"
+    ],
+    "check_in_status_id": "check_in_status_1",
+    "activity_ids": [
+      "activity_1_0",
+      "activity_1_1"
+    ]
+  },
+  {
+    "id": "user_2",
+    "name": "User 2",
+    "name_kana": "ユーザー 2",
+    "contact_info": "user2@example.com",
+    "university_name": "University 2",
+    "role": "Student",
+    "introduction": "This is an introduction for User 2.",
+    "portfolio_url": null,
+    "group_id": "team_2",
+    "feedback_message_ids": [
+      "feedback_2_0",
+      "feedback_2_1"
+    ],
+    "check_in_status_id": "check_in_status_2",
+    "activity_ids": [
+      "activity_2_0",
+      "activity_2_1"
+    ]
+  },
+  {
+    "id": "user_3",
+    "name": "User 3",
+    "name_kana": "ユーザー 3",
+    "contact_info": "user3@example.com",
+    "university_name": "University 3",
+    "role": "Student",
+    "introduction": null,
+    "portfolio_url": [
+      "http://example.com/portfolio/3"
+    ],
+    "group_id": "team_1",
+    "feedback_message_ids": [
+      "feedback_3_0",
+      "feedback_3_1",
+      "feedback_3_2"
+    ],
+    "check_in_status_id": "check_in_status_3",
+    "activity_ids": [
+      "activity_3_0",
+      "activity_3_1",
+      "activity_3_2",
+      "activity_3_3",
+      "activity_3_4"
+    ]
+  },
+  {
+    "id": "user_4",
+    "name": "User 4",
+    "name_kana": "ユーザー 4",
+    "contact_info": "user4@example.com",
+    "university_name": "University 4",
+    "role": null,
+    "introduction": "This is an introduction for User 4.",
+    "portfolio_url": null,
+    "group_id": "team_1",
+    "feedback_message_ids": [
+      "feedback_4_0"
+    ],
+    "check_in_status_id": "check_in_status_4",
+    "activity_ids": [
+      "activity_4_0",
+      "activity_4_1",
+      "activity_4_2",
+      "activity_4_3"
+    ]
+  },
+  {
+    "id": "user_5",
+    "name": "User 5",
+    "name_kana": "ユーザー 5",
+    "contact_info": "user5@example.com",
+    "university_name": "University 0",
+    "role": "Researcher",
+    "introduction": null,
+    "portfolio_url": null,
+    "group_id": "team_3",
+    "feedback_message_ids": [
+      "feedback_5_0",
+      "feedback_5_1"
+    ],
+    "check_in_status_id": "check_in_status_5",
+    "activity_ids": [
+      "activity_5_0",
+      "activity_5_1",
+      "activity_5_2"
+    ]
+  },
+  {
+    "id": "user_6",
+    "name": "User 6",
+    "name_kana": "ユーザー 6",
+    "contact_info": "user6@example.com",
+    "university_name": "University 1",
+    "role": "Student",
+    "introduction": "This is an introduction for User 6.",
+    "portfolio_url": [
+      "http://example.com/portfolio/6"
+    ],
+    "group_id": "team_3",
+    "feedback_message_ids": [
+      "feedback_6_0",
+      "feedback_6_1"
+    ],
+    "check_in_status_id": "check_in_status_6",
+    "activity_ids": [
+      "activity_6_0",
+      "activity_6_1"
+    ]
+  },
+  {
+    "id": "user_7",
+    "name": "User 7",
+    "name_kana": "ユーザー 7",
+    "contact_info": "user7@example.com",
+    "university_name": "University 2",
+    "role": "Student",
+    "introduction": null,
+    "portfolio_url": null,
+    "group_id": "team_3",
+    "feedback_message_ids": [
+      "feedback_7_0"
+    ],
+    "check_in_status_id": "check_in_status_7",
+    "activity_ids": [
+      "activity_7_0",
+      "activity_7_1",
+      "activity_7_2",
+      "activity_7_3",
+      "activity_7_4"
+    ]
+  },
+  {
+    "id": "user_8",
+    "name": "User 8",
+    "name_kana": "ユーザー 8",
+    "contact_info": "user8@example.com",
+    "university_name": "University 3",
+    "role": "Researcher",
+    "introduction": "This is an introduction for User 8.",
+    "portfolio_url": null,
+    "group_id": "team_1",
+    "feedback_message_ids": [
+      "feedback_8_0",
+      "feedback_8_1",
+      "feedback_8_2"
+    ],
+    "check_in_status_id": "check_in_status_8",
+    "activity_ids": [
+      "activity_8_0",
+      "activity_8_1"
+    ]
+  },
+  {
+    "id": "user_9",
+    "name": "User 9",
+    "name_kana": "ユーザー 9",
+    "contact_info": "user9@example.com",
+    "university_name": "University 4",
+    "role": null,
+    "introduction": null,
+    "portfolio_url": [
+      "http://example.com/portfolio/9"
+    ],
+    "group_id": "team_5",
+    "feedback_message_ids": [
+      "feedback_9_0",
+      "feedback_9_1"
+    ],
+    "check_in_status_id": "check_in_status_9",
+    "activity_ids": [
+      "activity_9_0",
+      "activity_9_1",
+      "activity_9_2",
+      "activity_9_3",
+      "activity_9_4"
+    ]
+  },
+  {
+    "id": "user_10",
+    "name": "User 10",
+    "name_kana": "ユーザー 10",
+    "contact_info": "user10@example.com",
+    "university_name": "University 0",
+    "role": "Student",
+    "introduction": "This is an introduction for User 10.",
+    "portfolio_url": null,
+    "group_id": "team_5",
+    "feedback_message_ids": [
+      "feedback_10_0",
+      "feedback_10_1",
+      "feedback_10_2"
+    ],
+    "check_in_status_id": "check_in_status_10",
+    "activity_ids": [
+      "activity_10_0",
+      "activity_10_1",
+      "activity_10_2",
+      "activity_10_3",
+      "activity_10_4"
+    ]
+  },
+  {
+    "id": "user_11",
+    "name": "User 11",
+    "name_kana": "ユーザー 11",
+    "contact_info": "user11@example.com",
+    "university_name": "University 1",
+    "role": null,
+    "introduction": null,
+    "portfolio_url": null,
+    "group_id": "team_0",
+    "feedback_message_ids": [
+      "feedback_11_0"
+    ],
+    "check_in_status_id": "check_in_status_11",
+    "activity_ids": [
+      "activity_11_0",
+      "activity_11_1",
+      "activity_11_2"
+    ]
+  },
+  {
+    "id": "user_12",
+    "name": "User 12",
+    "name_kana": "ユーザー 12",
+    "contact_info": "user12@example.com",
+    "university_name": "University 2",
+    "role": "Lecturer",
+    "introduction": "This is an introduction for User 12.",
+    "portfolio_url": [
+      "http://example.com/portfolio/12"
+    ],
+    "group_id": "team_4",
+    "feedback_message_ids": [
+      "feedback_12_0",
+      "feedback_12_1"
+    ],
+    "check_in_status_id": "check_in_status_12",
+    "activity_ids": [
+      "activity_12_0"
+    ]
+  },
+  {
+    "id": "user_13",
+    "name": "User 13",
+    "name_kana": "ユーザー 13",
+    "contact_info": "user13@example.com",
+    "university_name": "University 3",
+    "role": null,
+    "introduction": null,
+    "portfolio_url": null,
+    "group_id": "team_4",
+    "feedback_message_ids": [
+      "feedback_13_0"
+    ],
+    "check_in_status_id": "check_in_status_13",
+    "activity_ids":[]
+  },
+  {
+    "id": "user_14",
+    "name": "User 14",
+    "name_kana": "ユーザー 14",
+    "contact_info": "user14@example.com",
+    "university_name": "University 4",
+    "role": "Lecturer",
+    "introduction": "This is an introduction for User 14.",
+    "portfolio_url": null,
+    "group_id": "team_4",
+    "feedback_message_ids": [
+      "feedback_14_0"
+    ],
+    "check_in_status_id": "check_in_status_14",
+    "activity_ids": [
+      "activity_14_0",
+      "activity_14_1",
+      "activity_14_2",
+      "activity_14_3",
+      "activity_14_4"
+    ]
+  },
+  {
+    "id": "user_15",
+    "name": "User 15",
+    "name_kana": "ユーザー 15",
+    "contact_info": "user15@example.com",
+    "university_name": "University 0",
+    "role": "Student",
+    "introduction": null,
+    "portfolio_url": [
+      "http://example.com/portfolio/15"
+    ],
+    "group_id": "team_5",
+    "feedback_message_ids": [
+      "feedback_15_0",
+      "feedback_15_1",
+      "feedback_15_2"
+    ],
+    "check_in_status_id": "check_in_status_15",
+    "activity_ids": [
+      "activity_15_0",
+      "activity_15_1",
+      "activity_15_2"
+    ]
+  },
+  {
+    "id": "user_16",
+    "name": "User 16",
+    "name_kana": "ユーザー 16",
+    "contact_info": "user16@example.com",
+    "university_name": "University 1",
+    "role": "Researcher",
+    "introduction": "This is an introduction for User 16.",
+    "portfolio_url": null,
+    "group_id": "team_5",
+    "feedback_message_ids": [
+      "feedback_16_0"
+    ],
+    "check_in_status_id": "check_in_status_16",
+    "activity_ids": [
+      "activity_16_0",
+      "activity_16_1",
+      "activity_16_2"
+    ]
+  },
+  {
+    "id": "user_17",
+    "name": "User 17",
+    "name_kana": "ユーザー 17",
+    "contact_info": "user17@example.com",
+    "university_name": "University 2",
+    "role": "Student",
+    "introduction": null,
+    "portfolio_url": null,
+    "group_id": "team_4",
+    "feedback_message_ids": [
+      "feedback_17_0",
+      "feedback_17_1",
+      "feedback_17_2"
+    ],
+    "check_in_status_id": "check_in_status_17",
+    "activity_ids": [
+      "activity_17_0",
+      "activity_17_1"
+    ]
+  },
+  {
+    "id": "user_18",
+    "name": "User 18",
+    "name_kana": "ユーザー 18",
+    "contact_info": "user18@example.com",
+    "university_name": "University 3",
+    "role": null,
+    "introduction": "This is an introduction for User 18.",
+    "portfolio_url": [
+      "http://example.com/portfolio/18"
+    ],
+    "group_id": "team_4",
+    "feedback_message_ids": [
+      "feedback_18_0"
+    ],
+    "check_in_status_id": "check_in_status_18",
+    "activity_ids": [
+      "activity_18_0"
+    ]
+  },
+  {
+    "id": "user_19",
+    "name": "User 19",
+    "name_kana": "ユーザー 19",
+    "contact_info": "user19@example.com",
+    "university_name": "University 4",
+    "role": null,
+    "introduction": null,
+    "portfolio_url": null,
+    "group_id": "team_0",
+    "feedback_message_ids": [
+      "feedback_19_0",
+      "feedback_19_1"
+    ],
+    "check_in_status_id": "check_in_status_19",
+    "activity_ids": [
+      "activity_19_0",
+      "activity_19_1",
+      "activity_19_2"
+    ]
+  }
+]

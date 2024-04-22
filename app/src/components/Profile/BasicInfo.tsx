@@ -1,295 +1,222 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
-import Divider from "@mui/joy/Divider";
-import FormControl from "@mui/joy/FormControl";
-import FormLabel from "@mui/joy/FormLabel";
-import Input from "@mui/joy/Input";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 import Card from "@mui/joy/Card";
-import CardActions from "@mui/joy/CardActions";
-import CardOverflow from "@mui/joy/CardOverflow";
-import EditIcon from "@mui/icons-material/Edit";
-import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import QRCode from "qrcode.react";
-interface BasicInfoProps {}
-const BasicInfo: React.FC<BasicInfoProps> = ({}) => {
-  const [isEditing, setIsEditing] = useState(false); // 編集モードの状態
+import { User } from "@/interface/types";
+import {
+  AspectRatio,
+  Avatar,
+  CardContent,
+  Modal,
+  ModalDialog,
+  Sheet,
+} from "@mui/joy";
+import Image from "next/image";
+import QrCodeRoundedIcon from "@mui/icons-material/QrCodeRounded";
+import { useRouter } from "next/router";
+import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
+import { Download, SchoolRounded } from "@mui/icons-material";
+import FeedbackForm from "./FeedbackForm";
+interface Props {
+  user: User;
+}
+const BasicInfo: React.FC<Props> = ({ user }) => {
+  const [QROpen, setQROpen] = React.useState<boolean>(false);
+  const [feedbackOpen, setFeedbackOpen] = React.useState<boolean>(false);
+  const router = useRouter();
+  const qrRef = useRef<HTMLDivElement>(null);
 
-  return (
-    <Card>
-      <Box sx={{ mb: 1 }}>
-        <Typography level="title-md">基本情報</Typography>
-      </Box>
-      <Divider />
-      {isEditing ? <EditBasicInfo /> : <DisplayBasicInfo />}
-      <CardOverflow sx={{ borderTop: "1px solid", borderColor: "divider" }}>
-        <CardActions sx={{ alignSelf: "flex-end", pt: 2 }}>
-          {isEditing ? (
-            <>
-              <Button
-                size="sm"
-                variant="outlined"
-                color="neutral"
-                onClick={() => setIsEditing(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                size="sm"
-                variant="solid"
-                onClick={() => setIsEditing(false)}
-              >
-                Save
-              </Button>
-            </>
-          ) : (
-            <Button
-              size="sm"
-              variant="solid"
-              startDecorator={<EditIcon />}
-              onClick={() => setIsEditing(true)}
-            >
-              Edit
-            </Button>
-          )}
-        </CardActions>
-      </CardOverflow>
-    </Card>
-  );
-};
+  const [userIcon, setUserIcon] = useState(""); // ユーザーのアイコンURL
+  const url = `${window.location.origin}${router.asPath}`;
 
-const EditBasicInfo: React.FC<BasicInfoProps> = (props) => {
-  const name = "山田太郎";
-  const hiragana = "やまだたろう";
-  return (
-    <>
-      <Stack
-        direction="row"
-        spacing={3}
-        sx={{ display: { xs: "none", md: "flex" }, my: 1 }}
-      >
-        <Stack direction="column" spacing={1}>
-          <QRCode
-            value={"https://mui.com/"}
-            size={160}
-            level="H"
-            includeMargin={false}
-          />
-        </Stack>
-        <Stack spacing={2} sx={{ flexGrow: 1 }}>
-          <Stack spacing={1}>
-            <FormLabel>名前</FormLabel>
-            <FormControl
-              sx={{
-                display: { sm: "flex-column", md: "flex-row" },
-                gap: 2,
-              }}
-            >
-              <Input size="sm" placeholder={name} />
-              <Input size="sm" placeholder={hiragana} sx={{ flexGrow: 1 }} />
-            </FormControl>
-          </Stack>
+  // useEffect(() => {
+  //   const fetchUserIcon = async () => {
+  //     const response = await fetch("/api/fetchIcon");
+  //     const data = await response.json();
+  //     if (!response.ok) {
+  //       console.error("Failed to fetch user icon:", data.error);
+  //       return;
+  //     }
+  //     setUserIcon(data.icon);
+  //     console.log("User icon fetched:", data.icon);
+  //   };
 
-          <Stack direction="row" spacing={2}>
-            <FormControl>
-              <FormLabel>役割</FormLabel>
-              <Input size="sm" defaultValue="UI Developer" />
-            </FormControl>
-            <FormControl sx={{ flexGrow: 1 }}>
-              <FormLabel>Email</FormLabel>
-              <Input
-                size="sm"
-                type="email"
-                startDecorator={<EmailRoundedIcon />}
-                placeholder="email"
-                defaultValue="siriwatk@test.com"
-                sx={{ flexGrow: 1 }}
-              />
-            </FormControl>
-          </Stack>
-        </Stack>
-      </Stack>
-      <Stack
-        direction="column"
-        spacing={2}
-        sx={{ display: { xs: "flex", md: "none" }, my: 1 }}
-      >
-        <Stack direction="row" spacing={2}>
-          <Stack direction="column" spacing={1}>
-            <QRCode
-              value={"https://mui.com/"}
-              size={160}
-              level="H"
-              includeMargin={false}
-            />
-          </Stack>
-          <Stack spacing={1} sx={{ flexGrow: 1 }}>
-            <FormLabel>名前</FormLabel>
-            <FormControl
-              sx={{
-                display: {
-                  sm: "flex-column",
-                  md: "flex-row",
-                },
-                gap: 2,
-              }}
-            >
-              <Input size="sm" placeholder="" />
-              <Input size="sm" placeholder="ひらがな" />
-            </FormControl>
-          </Stack>
-        </Stack>
-        <FormControl>
-          <FormLabel>役割</FormLabel>
-          <Input size="sm" defaultValue="UI Developer" />
-        </FormControl>
-        <FormControl sx={{ flexGrow: 1 }}>
-          <FormLabel>Email</FormLabel>
-          <Input
-            size="sm"
-            type="email"
-            startDecorator={<EmailRoundedIcon />}
-            placeholder="email"
-            defaultValue="siriwatk@test.com"
-            sx={{ flexGrow: 1 }}
-          />
-        </FormControl>
-      </Stack>
-    </>
-  );
-};
+  //   fetchUserIcon();
+  // }, []);
 
-const DisplayBasicInfo: React.FC<BasicInfoProps> = (props) => {
-  const name = "山田太郎";
-  const hiragana = "やまだたろう";
-  const role = "UI Developer";
-  const email = "siriwatk@test.com";
+  const downloadQRCode = () => {
+    // QRコードのcanvas要素を取得
+    if (!qrRef.current) return console.error("QRコードが見つかりません");
+    const canvas = qrRef.current.querySelector("canvas");
+    // canvasを画像としてダウンロード
+    if (!canvas) return console.error("QRコードが見つかりません");
+    const image = canvas
+      .toDataURL("image/png")
+      .replace("image/png", "image/octet-stream");
+    // ダウンロードリンクを生成して自動クリックさせる
+    let link = document.createElement("a");
+    link.download = `qr-code_${user.name}.png`;
+    link.href = image;
+    link.click();
+  };
 
   return (
     <>
-      <Stack
-        direction="row"
-        spacing={3}
-        sx={{ display: { xs: "none", md: "flex" }, my: 1 }}
+      <Card
+        orientation="horizontal"
+        sx={{
+          width: "100%",
+          display: "flex",
+          // flexDirection: { xs: "column", sm: "row" },
+          flexDirection: "column",
+          [`& > *`]: {
+            // "--stack-point": "460px",
+            minWidth:
+              "clamp(0px, (calc(var(--stack-point) - 2 * var(--Card-padding) - 2 * var(--variant-borderWidth, 0px)) + 1px - 100%) * 999, 100%)",
+          },
+          // make the card resizable for demo
+          overflow: "auto",
+          // resize: "horizontal",
+        }}
       >
-        <Stack direction="column" spacing={1}>
-          <QRCode
-            value={"https://mui.com/"}
-            size={160}
-            level="H"
-            includeMargin={false}
-          />
-        </Stack>
-        <Stack>
-          <Stack spacing={2} sx={{ flexGrow: 1 }}>
-            <Stack spacing={1}>
-              <Typography level="body-sm" sx={{ ml: 1 }}>
-                名前
+        <Stack flexDirection={{ xs: "column", sm: "row" }}>
+          <Stack
+            direction="column"
+            spacing={1}
+            mr={{ xs: 0, sm: 2 }}
+            mb={{ xs: 2, sm: 0 }}
+          >
+            <AspectRatio
+              ratio="1"
+              maxHeight={200}
+              sx={{ flex: 1, minWidth: 180, borderRadius: "4px" }}
+            >
+              {user.slack_icon_url ? (
+                <Image
+                  alt=""
+                  src={user.slack_icon_url}
+                  width={192}
+                  height={192}
+                />
+              ) : (
+                <Avatar sx={{ width: 192, height: 192 }} />
+              )}
+            </AspectRatio>
+          </Stack>
+          <CardContent>
+            <Stack direction={"row"} justifyContent={"space-between"}>
+              <Typography fontSize="xl">{user.name}</Typography>
+              <Button
+                startDecorator={<QrCodeRoundedIcon />}
+                variant="soft"
+                color="primary"
+                onClick={() => setQROpen(true)}
+              >
+                QR
+              </Button>
+            </Stack>
+            <Typography level="body-sm" textColor="text.tertiary">
+              {user.name_kana}
+            </Typography>
+            <Sheet
+              sx={{
+                bgcolor: "background.level1",
+                borderRadius: "sm",
+                p: 1.5,
+                my: 1.5,
+                display: "flex",
+                flexDirection: "column",
+                gap: 2,
+                "& > div": { flex: 1 },
+              }}
+              // variant="outlined"
+            >
+              <Typography>{user.role}</Typography>
+              <Typography
+                color="primary"
+                sx={{}}
+                startDecorator={<EmailRoundedIcon color="disabled" />}
+              >
+                {user.contact_info}
               </Typography>
-              <FormControl
-                sx={{
-                  display: { sm: "flex-column", md: "flex-row" },
-                }}
+              <Typography
+                sx={{}}
+                startDecorator={<SchoolRounded color="disabled" />}
               >
-                <Typography>{name}</Typography>
-                <Typography level="body-sm">{hiragana}</Typography>
-              </FormControl>
-            </Stack>
-
-            <Stack direction="row" spacing={2}>
-              <FormControl>
-                <Typography level="body-sm" sx={{}}>
-                  役割
+                <Typography level="body-sm">{user.university_name}</Typography>
+                <Typography level="body-sm" ml={1}>
+                  {user.faculty}
                 </Typography>
-                <Typography>{role}</Typography>
-              </FormControl>
-              <FormControl sx={{ flexGrow: 1, display: "flex" }}>
-                <Typography
-                  level="body-sm"
-                  sx={{
-                    ml: 1,
-                  }}
-                >
-                  Email
+                <Typography level="body-sm" ml={1}>
+                  {user.department}
                 </Typography>
-                <Typography
-                  color="primary"
-                  sx={{
-                    ml: 1,
-                  }}
-                  // startDecorator={<EmailRoundedIcon color="disabled"/>}
-                >
-                  {email}
-                </Typography>
-              </FormControl>
-            </Stack>
-          </Stack>
+              </Typography>
+              {/* <Typography
+                sx={{}}
+                startDecorator={<GroupRounded color="disabled" />}
+              >
+                {user.group_id}
+              </Typography> */}
+            </Sheet>
+            <Box
+              sx={{ display: "flex", gap: 1.5, "& > button": { flex: 1 } }}
+              width={"100%"}
+            >
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={() => setFeedbackOpen(true)}
+              >
+                フィードバックを送る
+              </Button>
+              <Button
+                variant="solid"
+                color="primary"
+                onClick={() => router.push(`/teams/${user.group_id}`)}
+              >
+                チームを見に行く
+              </Button>
+            </Box>
+          </CardContent>
         </Stack>
-      </Stack>
-      <Stack
-        direction="column"
-        spacing={2}
-        sx={{ display: { xs: "flex", md: "none" }, my: 1 }}
-      >
-        <Stack direction="row" spacing={2}>
-          <Stack direction="column" spacing={1}>
-            <QRCode
-              value={"https://mui.com/"}
-              size={160}
-              level="H"
-              includeMargin={false}
-            />
-          </Stack>
-          <Stack>
-            <Stack spacing={2} sx={{ flexGrow: 1 }}>
-              <Stack spacing={1}>
-                <Typography level="body-sm" sx={{ ml: 1 }}>
-                  名前
-                </Typography>
-                <FormControl
-                  sx={{
-                    display: { sm: "flex-column", md: "flex-row" },
-                    gap: 1,
-                  }}
-                >
-                  <Typography>{name}</Typography>
-                  <Typography level="body-sm">{hiragana}</Typography>
-                </FormControl>
-              </Stack>
-
-              <Stack direction="row" spacing={2}>
-                <FormControl>
-                  <Typography level="body-sm" sx={{}}>
-                    役割
-                  </Typography>
-                  <Typography>{role}</Typography>
-                </FormControl>
-                <FormControl sx={{ flexGrow: 1 }}>
-                  <Typography
-                    level="body-sm"
-                    sx={{
-                      ml: 1,
-                    }}
-                  >
-                    Email
-                  </Typography>
-                  <Typography
-                    color="primary"
-                    sx={{
-                      ml: 1,
-                    }}
-                    // startDecorator={<EmailRoundedIcon color="disabled"/>}
-                  >
-                    {email}
-                  </Typography>
-                </FormControl>
-              </Stack>
-            </Stack>
-          </Stack>
-        </Stack>
-      </Stack>
+        {/* <CardActions>
+          
+        </CardActions> */}
+      </Card>
+      <Modal open={QROpen} onClose={() => setQROpen(false)}>
+        <ModalDialog>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              padding: "24px",
+              flexDirection: "column",
+              gap: 2,
+            }}
+          >
+            <div ref={qrRef}>
+              <QRCode value={url} fgColor={"#636b74"} />
+            </div>
+            <Button
+              startDecorator={<Download />}
+              color="primary"
+              variant="outlined"
+              onClick={downloadQRCode}
+            >
+              Download
+            </Button>
+          </Box>
+        </ModalDialog>
+      </Modal>
+      <Modal open={feedbackOpen} onClose={() => setFeedbackOpen(false)}>
+        <ModalDialog>
+          <FeedbackForm />
+        </ModalDialog>
+      </Modal>
     </>
   );
 };

@@ -1,0 +1,133 @@
+[
+  {
+    "id": "team_0",
+    "name": "Team 0",
+    "member_ids": [
+      "user_16",
+      "user_6",
+      "user_17",
+      "user_12"
+    ],
+    "message_ids": [
+      "message_team_0_0",
+      "message_team_0_1",
+      "message_team_0_2",
+      "message_team_0_3",
+      "message_team_0_4",
+      "message_team_0_5",
+      "message_team_0_6",
+      "message_team_0_7",
+      "message_team_0_8"
+    ],
+    "file_ids": [
+      "file_team_0_0",
+      "file_team_0_1",
+      "file_team_0_2",
+      "file_team_0_3",
+      "file_team_0_4"
+    ]
+  },
+  {
+    "id": "team_1",
+    "name": "Team 1",
+    "member_ids": [
+      "user_14",
+      "user_13",
+      "user_11",
+      "user_8"
+    ],
+    "message_ids": [
+      "message_team_1_0",
+      "message_team_1_1",
+      "message_team_1_2",
+      "message_team_1_3",
+      "message_team_1_4",
+      "message_team_1_5"
+    ],
+    "file_ids": [
+      "file_team_1_0",
+      "file_team_1_1"
+    ]
+  },
+  {
+    "id": "team_2",
+    "name": "Team 2",
+    "member_ids": [
+      "user_7",
+      "user_19",
+      "user_10",
+      "user_1"
+    ],
+    "message_ids": [
+      "message_team_2_0",
+      "message_team_2_1",
+      "message_team_2_2",
+      "message_team_2_3",
+      "message_team_2_4",
+      "message_team_2_5",
+      "message_team_2_6",
+      "message_team_2_7",
+      "message_team_2_8",
+      "message_team_2_9",
+      "message_team_2_10"
+    ],
+    "file_ids": [
+      "file_team_2_0",
+      "file_team_2_1",
+      "file_team_2_2",
+      "file_team_2_3",
+      "file_team_2_4"
+    ]
+  },
+  {
+    "id": "team_3",
+    "name": "Team 3",
+    "member_ids": [
+      "user_16",
+      "user_13",
+      "user_8",
+      "user_11"
+    ],
+    "message_ids": [
+      "message_team_3_0",
+      "message_team_3_1",
+      "message_team_3_2",
+      "message_team_3_3",
+      "message_team_3_4",
+      "message_team_3_5",
+      "message_team_3_6",
+      "message_team_3_7",
+      "message_team_3_8"
+    ],
+    "file_ids": [
+      "file_team_3_0",
+      "file_team_3_1",
+      "file_team_3_2"
+    ]
+  },
+  {
+    "id": "team_4",
+    "name": "Team 4",
+    "member_ids": [
+      "user_17",
+      "user_11",
+      "user_9",
+      "user_7"
+    ],
+    "message_ids": [
+      "message_team_4_0",
+      "message_team_4_1",
+      "message_team_4_2",
+      "message_team_4_3",
+      "message_team_4_4",
+      "message_team_4_5",
+      "message_team_4_6",
+      "message_team_4_7",
+      "message_team_4_8"
+    ],
+    "file_ids": [
+      "file_team_4_0",
+      "file_team_4_1"
+    ]
+  }
+]
