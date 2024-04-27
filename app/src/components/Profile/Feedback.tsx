@@ -2,99 +2,48 @@ import { FeedbackMessage, User } from "@/interface/types";
 import { Lightbulb, PriorityHigh, ThumbUpAlt } from "@mui/icons-material";
 import {
   Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Divider,
-  FormControl,
-  FormHelperText,
-  FormLabel,
-  Input,
-  Radio,
-  RadioGroup,
   Sheet,
   Step,
   StepIndicator,
   Stepper,
-  Textarea,
   Typography,
   stepClasses,
   useTheme,
 } from "@mui/joy";
-import { set } from "firebase/database";
 import React, { useEffect } from "react";
 import FeedbackForm from "./FeedbackForm";
+// import FeedbackForm from "./FeedbackForm";
 
 interface Props {
   user: User;
 }
 
 const Feedback: React.FC<Props> = (props) => {
-  // const [feedbacks, setFeedbacks] = React.useState<FeedbackMessage[]>([]);
-  // useEffect(() => {
-  //   try {
-  //     fetch("/FeedbackMessage.json")
-  //       .then((response) => response.json())
-  //       .then((data: FeedbackMessage[]) => {
-  //         // props.user.feedback_message_ids が存在するか確認し、
-  //         // 存在しない場合は空の配列を使用する
-  //         const feedbackIds = props.user.feedback_message_ids || [];
-  //         const feedbackMessages = data.filter((feedback) => {
-  //           return feedbackIds.includes(feedback.id);
-  //         });
-  //         // 状態にフィードバックメッセージをセットする
-  //         setFeedbacks(feedbackMessages);
-  //         console.log(feedbackMessages);
-  //       });
-  //   } catch (error) {
-  //     console.error("Feedback fetching error:", error);
-  //   }
-  // }, [props.user.feedback_message_ids]);
+  const [feedbacks, setFeedbacks] = React.useState<FeedbackMessage[]>([]);
+  useEffect(() => {
+    const fetchFeedbacks = async () => {
+      try {
+        const res = await fetch(`/api/feedback/${props.user.id}`);
+        if (!res.ok)
+          throw new Error(
+            `Failed to fetch feedbacks with status: ${res.status}`
+          );
+        const data = await res.json();
+        setFeedbacks(data);
+      } catch (error) {
+        console.error("Feedback fetching error:", error);
+      }
+    };
+
+    if (props.user && props.user.id) {
+      fetchFeedbacks();
+    }
+  }, [props.user.id]);
   const theme = useTheme();
-
-  // export interface FeedbackMessage {
-  //   id: string;
-  //   name?: string;
-  //   title: string;
-  //   type: "good" | "hint" | "bad";
-  //   message: string;
-  //   timestamp: string;
-  // }
-
-  const feedbacks: FeedbackMessage[] = [
-    {
-      id: "1",
-      name: "山田太郎",
-      title: "この部分のデザインが素晴らしいです",
-      type: "good",
-      message:
-        "ユーザーインターフェースは直感的で、非常に使いやすく設計されています。ナビゲーションの流れもスムーズで、ユーザーエクスペリエンスが非常に向上しています。このデザインは視覚的にも魅力的で、素晴らしいワークです。",
-      timestamp: "2021-10-01T12:00:00",
-    },
-    {
-      id: "2",
-      name: "田中花子",
-      title: "この部分のデザインが素晴らしいです",
-      type: "hint",
-      message:
-        "カラースキームは非常によく考えられており、視覚的に魅力的です。詳細にわたる注意が払われているのが分かります。ただし、いくつかのユーザーには色の選択が強すぎると感じられる可能性もあります。",
-      timestamp: "2021-10-01T12:00:00",
-    },
-    {
-      id: "3",
-      name: "佐藤次郎",
-      title: "この部分のデザインが素晴らしいです",
-      type: "bad",
-      message:
-        "フォントの選択と配置が全体の調和を欠いており、デザインの一貫性が乱れています。全体の印象を損なわずに、より調和のとれたデザインに改善することが必要です。特にユーザビリティを考慮する必要があります。",
-      timestamp: "2021-10-01T12:00:00",
-    },
-  ];
 
   return (
     <>
-      <FeedbackForm />
+      <FeedbackForm userId={props.user.id} />
       <Sheet
         color="neutral"
         variant="soft"
@@ -116,83 +65,6 @@ const Feedback: React.FC<Props> = (props) => {
             </Step>
           )}
           {feedbacks.map((feedback, index) => (
-            // <Step
-            //   key={index}
-            //   sx={{ mb: 2 }}
-            //   indicator={
-            //     <StepIndicator
-            //       variant="soft"
-            //       color={
-            //         feedback.type === "good"
-            //           ? "primary"
-            //           : feedback.type === "hint"
-            //           ? "success"
-            //           : "danger"
-            //       }
-            //       sx={{ padding: 2 }}
-            //     >
-            //       {feedback.type === "good" ? (
-            //         <ThumbUpAlt fontSize="medium" />
-            //       ) : feedback.type === "hint" ? (
-            //         <Lightbulb fontSize="medium" />
-            //       ) : (
-            //         <PriorityHigh fontSize="medium" />
-            //       )}
-            //       {/* <ThumbUpAlt fontSize="medium" /> */}
-            //     </StepIndicator>
-            //   }
-            // >
-            //   <Typography level="title-md">{feedback.name}</Typography>
-            //   <Card
-            //     sx={{
-            //       padding: 2,
-            //       borderRadius: 4,
-            //       mb: 2,
-            //       // backgroundColor:
-            //       //   feedback.feedback === "good"
-            //       //     ? theme.vars.palette.primary[50]
-            //       //     : feedback.feedback === "hint"
-            //       //     ? theme.vars.palette.success[50]
-            //       //     : theme.vars.palette.danger[50],
-            //     }}
-            //     variant="outlined"
-            //     color={
-            //       feedback.type === "good"
-            //         ? "primary"
-            //         : feedback.type === "hint"
-            //         ? "success"
-            //         : "danger"
-            //     }
-            //   >
-            //     <Typography
-            //       level="title-lg"
-            //       // color={
-            //       //   feedback.feedback === "good"
-            //       //     ? "primary"
-            //       //     : feedback.feedback === "hint"
-            //       //     ? "success"
-            //       //     : "danger"
-            //       // }
-            //       // variant="soft"
-            //     >
-            //       {feedback.title}
-            //     </Typography>
-            //     <Divider inset="none" />
-            //     <Typography
-            //       level="body-sm"
-            //       // color={
-            //       //   feedback.feedback === "good"
-            //       //     ? "primary"
-            //       //     : feedback.feedback === "hint"
-            //       //     ? "success"
-            //       //     : "danger"
-            //       // }
-            //       // variant="soft"
-            //     >
-            //       {feedback.message}
-            //     </Typography>
-            //   </Card>
-            // </Step>
             <Step
               key={index}
               indicator={

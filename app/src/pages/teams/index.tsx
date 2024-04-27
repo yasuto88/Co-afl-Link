@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Button, Sheet, Typography } from "@mui/joy";
 import { useRouter } from "next/router";
-import TeamCard from "@/components/Users/TeamList/teamCard";
+import TeamCard from "@/components/TeamList/teamCard";
 import { Team } from "@/interface/types";
 import CachedIcon from "@mui/icons-material/Cached";
 
@@ -49,7 +49,7 @@ export default function TeamList() {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  }
+  };
   return (
     <Sheet sx={{ padding: 2 }}>
       <Button

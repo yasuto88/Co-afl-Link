@@ -1,9 +1,9 @@
-import Files from "@/components/Users/TeamList/Files";
+import Files from "@/components/TeamList/Files";
 import { Box, Stack, Tab, TabList, Tabs, tabClasses } from "@mui/joy";
 import React, { useEffect } from "react";
 
-import Activity from "@/components/Users/TeamList/Activity";
-import Chat from "@/components/Users/TeamList/Chat";
+import Activity from "@/components/TeamList/Activity";
+import Chat from "@/components/TeamList/Chat";
 import { Team, User } from "@/interface/types";
 import { useRouter } from "next/router";
 
@@ -17,18 +17,20 @@ const TeamInfo: React.FC<Props> = (props) => {
   const [tabIndex, setTabIndex] = React.useState(0);
 
   useEffect(() => {
-    try {
+    if (teamId) {
       const fetchTeamData = async () => {
         const res = await fetch(`/api/team/${teamId}`);
-        const data: Team = await res.json();
-        setTeamData(data);
-        console.log("Team data fetched:", data);
+        if (res.ok) {
+          const data: Team = await res.json();
+          setTeamData(data);
+          console.log("Team data fetched:", data);
+        } else {
+          console.error("Failed to load the team data");
+        }
       };
       fetchTeamData();
-    } catch (error) {
-      console.error("Error loading the participants:", error);
     }
-  }, [teamId]);
+  }, [teamId]); // 依存配列に tabIndex を含めない
 
   return (
     <Box sx={{ flex: 1, width: "100%" }}>
@@ -70,9 +72,6 @@ const TeamInfo: React.FC<Props> = (props) => {
               activity
             </Tab>
             <Tab sx={{ borderRadius: "6px 6px 0 0" }} indicatorInset value={1}>
-              files
-            </Tab>
-            <Tab sx={{ borderRadius: "6px 6px 0 0" }} indicatorInset value={2}>
               chat
             </Tab>
           </TabList>
@@ -89,13 +88,7 @@ const TeamInfo: React.FC<Props> = (props) => {
         }}
       >
         {tabIndex === 0 && teamData && <Activity team={teamData} />}
-        {tabIndex === 1 && teamData && (
-          <Files
-            // icon={<InsertDriveFileRoundedIcon />}
-            team={teamData}
-          />
-        )}
-        {tabIndex === 2 && teamData && <Chat team={teamData} />}
+        {tabIndex === 1 && teamData && <Chat team={teamData} />}
       </Stack>
     </Box>
   );

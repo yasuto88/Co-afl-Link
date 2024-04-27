@@ -34,6 +34,7 @@ export default async function handler(
         // 必要なデータに絞り込んでレスポンスを返す
         const teamResponse: Team = {
           id: doc.id,
+          slack_channel_id: teamData.slack_channel_id ?? "",
           name: teamData.name ?? "",
           member_ids: teamData.member_ids ?? [],
           message_ids: teamData.message_ids ?? [],

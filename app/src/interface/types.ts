@@ -21,6 +21,7 @@ export interface User {
 // フィードバックメッセージに関する情報
 export interface FeedbackMessage {
   id: string;
+  userId: string;
   name?: string;
   title: string;
   type: "good" | "hint" | "bad";
@@ -41,11 +42,13 @@ export type Message = {
   user_id: string;
   content: string;
   timestamp: string;
-  attachment?: {
+  // attachmentを配列に変更
+  
+  attachment?: [{
     fileName: string;
     type: string;
     size: string;
-  };
+  }];
 };
 
 // ファイルに関する情報
@@ -65,7 +68,7 @@ export type File = {
 
 // アクティビティに関する情報
 export type Activity = {
-  id: string;
+  user_id: string;
   time: string;
   description: string;
 };
@@ -73,6 +76,7 @@ export type Activity = {
 // チームに関する情報
 export type Team = {
   id: string;
+  slack_channel_id: string;
   name: string;
   member_ids: string[];
   message_ids: string[];

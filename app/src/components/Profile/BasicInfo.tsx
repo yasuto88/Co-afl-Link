@@ -182,9 +182,6 @@ const BasicInfo: React.FC<Props> = ({ user }) => {
             </Box>
           </CardContent>
         </Stack>
-        {/* <CardActions>
-          
-        </CardActions> */}
       </Card>
       <Modal open={QROpen} onClose={() => setQROpen(false)}>
         <ModalDialog>
@@ -214,7 +211,7 @@ const BasicInfo: React.FC<Props> = ({ user }) => {
       </Modal>
       <Modal open={feedbackOpen} onClose={() => setFeedbackOpen(false)}>
         <ModalDialog>
-          <FeedbackForm />
+          <FeedbackForm userId={user.id} />
         </ModalDialog>
       </Modal>
     </>
