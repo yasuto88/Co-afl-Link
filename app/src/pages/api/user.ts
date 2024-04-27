@@ -5,7 +5,7 @@ import fs from "fs";
 import path from "path";
 import admin from "firebase-admin";
 
-const serviceAccount = require("../../../co-afl-app-firebase-adminsdk-8duq1-b85223fa56.json"); // 秘密鍵を取得
+// 秘密鍵を取得
 
 export default async function handler(
   req: NextApiRequest,
@@ -15,7 +15,11 @@ export default async function handler(
   //　初期化する
   if (admin.apps.length === 0) {
     admin.initializeApp({
-      credential: cert(serviceAccount),
+      credential: cert({
+        projectId: process.env.FIREBASE_PROJECT_ID,
+        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+        privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+      }),
     });
   }
   const db = getFirestore();

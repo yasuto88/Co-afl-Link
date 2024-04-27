@@ -3,7 +3,6 @@ import axios from "axios";
 import type { NextApiRequest, NextApiResponse } from "next";
 const { cert } = require("firebase-admin/app");
 const { getFirestore } = require("firebase-admin/firestore");
-const serviceAccount = require("../../../../co-afl-app-firebase-adminsdk-8duq1-b85223fa56.json");
 const admin = require("firebase-admin");
 
 export default async function handler(
@@ -14,7 +13,11 @@ export default async function handler(
   // 初期化する
   if (admin.apps.length === 0) {
     admin.initializeApp({
-      credential: cert(serviceAccount),
+      credential: cert({
+        projectId: process.env.FIREBASE_PROJECT_ID,
+        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+        privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+      }),
     });
   }
   const db = getFirestore();

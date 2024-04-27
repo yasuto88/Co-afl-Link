@@ -2,13 +2,17 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { FeedbackMessage } from "@/interface/types"; // FeedbackMessage 型のインポートが必要です
 const { cert } = require("firebase-admin/app");
 const { getFirestore } = require("firebase-admin/firestore");
-const serviceAccount = require("../../../co-afl-app-firebase-adminsdk-8duq1-b85223fa56.json");
+
 const admin = require("firebase-admin");
 
 // Firebase Admin SDK の初期化
 if (admin.apps.length === 0) {
   admin.initializeApp({
-    credential: cert(serviceAccount),
+    credential: cert({
+      projectId: process.env.FIREBASE_PROJECT_ID,
+      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+      privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+    }),
   });
 }
 const db = getFirestore();
@@ -31,7 +35,7 @@ export default async function handler(
         type: feedbackMessage.type,
         message: feedbackMessage.message,
         timestamp: new Date().toISOString(),
-      }) ;
+      });
       console.log("Feedback message posted:", docRef.id);
       res
         .status(201)
